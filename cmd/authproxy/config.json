@@ -1,0 +1,14 @@
+{
+  "upstreams": [
+    {
+      "type": "server",
+      "prefix": "/",
+      "location": "http://localhost:3000"
+    },
+    {
+      "type": "server",
+      "prefix": "/api/",
+      "location": "http://localhost:4040"
+    }
+  ]
+}

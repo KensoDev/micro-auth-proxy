@@ -1,0 +1,14 @@
+{
+  "upstreams": [
+    {
+      "prefix": "/",
+      "type": "static",
+      "location": "static"
+    },
+    {
+      "type": "server",
+      "prefix": "/api",
+      "location": "http://localhost:4040"
+    }
+  ]
+}
