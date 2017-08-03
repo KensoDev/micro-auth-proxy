@@ -43,7 +43,9 @@ func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if cookie.Value == "" {
+	token := cookie.Value
+
+	if token == "" {
 		bytes, _ := publicAuthHtmlBytes()
 		w.Write(bytes)
 

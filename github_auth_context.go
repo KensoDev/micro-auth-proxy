@@ -14,6 +14,7 @@ import (
 type GithubAuthContext struct {
 	ClientID     string
 	ClientSecret string
+	Config       *Configuration
 }
 
 type GithubAuthRequest struct {
@@ -22,10 +23,11 @@ type GithubAuthRequest struct {
 	Code         string `json:"code"`
 }
 
-func NewGithubAuthContext() *GithubAuthContext {
+func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 	return &GithubAuthContext{
 		ClientID:     os.Getenv("CLIENT_ID"),
 		ClientSecret: os.Getenv("CLIENT_SECRET"),
+		Config:       config,
 	}
 }
 

@@ -25,7 +25,7 @@ func main() {
 	config, err := authproxy.NewConfiguration(data)
 	handleError(err)
 
-	authContext := authproxy.NewGithubAuthContext()
+	authContext := authproxy.NewGithubAuthContext(config)
 	http.Handle("/callback", authContext)
 
 	authproxy.NewHttpListeners(config)
