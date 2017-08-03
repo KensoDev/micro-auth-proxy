@@ -7,6 +7,7 @@ import (
 
 type Configuration struct {
 	Upstreams []Upstream `json:"upstreams"`
+	Users     []string   `json:"users"`
 }
 
 type Upstream struct {
@@ -21,6 +22,11 @@ func NewConfiguration(data []byte) (*Configuration, error) {
 
 	if err != nil {
 		return nil, fmt.Errorf("Problem with parsing the confi json file: %s", err.Error())
+	}
+
+	if len(config.Users) == 0 {
+		return nil, fmt.Errorf("You have no users configured")
+
 	}
 
 	return config, nil

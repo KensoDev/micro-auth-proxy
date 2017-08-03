@@ -38,7 +38,7 @@ func main() {
 
 func handleError(err error) {
 	if err != nil {
-		fmt.Errorf("Error reading your configuration file: %s", err.Error())
+		fmt.Printf("Error reading your configuration file: %s", err.Error())
 		os.Exit(1)
 	}
 }

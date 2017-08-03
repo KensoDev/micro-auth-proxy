@@ -1,8 +1,4 @@
 {
-  "users": [
-    "xyz",
-    "xyz"
-  ],
   "upstreams": [
     {
       "prefix": "/",
