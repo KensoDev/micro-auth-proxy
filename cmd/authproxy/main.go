@@ -25,13 +25,15 @@ func main() {
 	config, err := authproxy.NewConfiguration(data)
 	handleError(err)
 
+	authContext := authproxy.NewGithubAuthContext()
+	http.Handle("/callback", authContext)
+
 	authproxy.NewHttpListeners(config)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", *listenPort), nil); err != nil {
 		fmt.Errorf("Could not listen on port %s: %s", *listenPort, err.Error())
 		os.Exit(1)
 	}
-
 }
 
 func handleError(err error) {

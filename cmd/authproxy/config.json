@@ -3,12 +3,12 @@
     {
       "type": "server",
       "prefix": "/",
-      "location": "http://localhost:3000"
+      "location": "https://fd656e19.ngrok.io"
     },
     {
       "type": "server",
       "prefix": "/api/",
-      "location": "http://localhost:4040"
+      "location": "https://80d822c3.ngrok.io"
     }
   ]
 }
