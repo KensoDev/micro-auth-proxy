@@ -12,9 +12,10 @@ import (
 )
 
 type GithubAuthContext struct {
-	ClientID     string
-	ClientSecret string
-	Config       *Configuration
+	ClientID          string
+	ClientSecret      string
+	ValidAccessTokens []string
+	Config            *Configuration
 }
 
 type GithubAuthRequest struct {
@@ -25,19 +26,18 @@ type GithubAuthRequest struct {
 
 func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 	return &GithubAuthContext{
-		ClientID:     os.Getenv("CLIENT_ID"),
-		ClientSecret: os.Getenv("CLIENT_SECRET"),
-		Config:       config,
+		ClientID:          os.Getenv("CLIENT_ID"),
+		ClientSecret:      os.Getenv("CLIENT_SECRET"),
+		Config:            config,
+		ValidAccessTokens: []string{},
 	}
 }
 
-func inArray(val string, array []string) (exists bool, index int) {
+func inArray(val string, array []string) (exists bool) {
 	exists = false
-	index = -1
 
-	for i, v := range array {
+	for _, v := range array {
 		if val == v {
-			index = i
 			exists = true
 			return
 		}
@@ -57,6 +57,10 @@ type GithubAuthResponse struct {
 }
 
 func (c *GithubAuthContext) IsAccessTokenValidAndUserAuthorized(accessToken string) bool {
+	if inArray(accessToken, c.ValidAccessTokens) {
+		return true
+	}
+
 	responseBytes, err := c.GetUserDetailsFromGithub(accessToken)
 
 	if err != nil {
@@ -69,7 +73,11 @@ func (c *GithubAuthContext) IsAccessTokenValidAndUserAuthorized(accessToken stri
 		return false
 	}
 
-	userExists, _ := inArray(githubUser.UserName, c.Config.Users)
+	userExists := inArray(githubUser.UserName, c.Config.Users)
+
+	if userExists {
+		c.ValidAccessTokens = append(c.ValidAccessTokens, accessToken)
+	}
 
 	return userExists
 }
