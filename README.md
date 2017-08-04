@@ -1,33 +1,80 @@
-# micro-github-auth-proxy
-Github Auth proxy designed for micro-apps with static client and an API server
+# micro-auth-proxy
 
+Transparent auth reverse proxy designed for micro-apps with static client and an API server.
 
+This project is built to serve **internal** projects at your company. Those can
+include dashboard, internal tools and others.
 
-## What is this project?
+It is built with ACL and Docker deployment in mind and fits a very broad use
+case that can really serve any company that requires authentication for
+internal tools without messing with auth for every single project.
+
+## Overall architecture
+
+![Auth proxy architecture](http://assets.avi.io/authproxy-diagram.png)
+
+This is built to protext "upstreams" behind an auth backend (Currently only supports github).
+
+Say you have 2 upstreams configured:
+
+```
+// REDACTED
+  "upstreams": [
+    {
+      "type": "http",
+      "prefix": "/",
+      "location": "https://bdf682c0.ngrok.io"
+    },
+    {
+      "type": "http",
+      "prefix": "/api/",
+      "location": "https://6cc1b022.ngrok.io"
+    }
+  ]
+// REDACTED
+```
+
+Any request starting with `/api/` will be routed through to your backend server. Anything else `/` will go to the client.
+
+Because request are no longer routed directly from the client to the server, you will not have to define CORS or any sort of absolute URL on the client. You simply call `/api` if the client is behind the proxy and it will do the rest.
+
+### Features
+
+* Limiting users by username on Github
+* Restrict to a single http method. Some users will only be able to do GET and the rest can do anything. This comes in REALLY handy when you want to limit view vs edit without worrying about it on your backend.
+* Memorize the tokens, we don't DDOs gihub. Once a token has been verified it will be memorized and will not be checked.
+* Save the token in the cookie for the user (See limitations regarding this feature).
+* Docker friendly: Upstreams can be only visible to the main docker container and not accessible to the public. This makes the proxy the only gate to the code and you have to authenticate first.
 
 ## Configuration
 
+```
+{
+  "users": [
+    {
+      "username": "KensoDev"
+    },
+    {
+      "username": "KensoDev2",
+      "restrict": "GET"
+    }
+  ],
+  "upstreams": [
+    {
+      "type": "http",
+      "prefix": "/",
+      "location": "https://bdf682c0.ngrok.io"
+    },
+    {
+      "type": "http",
+      "prefix": "/api/",
+      "location": "https://6cc1b022.ngrok.io"
+    }
+  ]
+}
 
 ```
-  {
-    "users": [
-      "xyz",
-      "xyz"
-    ],
-    "upstreams": [
-      {
-        "prefix": "/",
-        "type": "static",
-        "location": "static"
-      },
-      {
-        "type": "server",
-        "prefix": "/api",
-        "location": "http://localhost:4040"
-      }
-    ]
-  }
-```
+
 
 * `users` - Users that are allowed to access your app.
 * `upstreams` - HTTP supported upstreams that the proxy will call

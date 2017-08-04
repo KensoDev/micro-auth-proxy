@@ -46,6 +46,18 @@ func inArray(val string, array []string) (exists bool) {
 	return
 }
 
+type mapf func(interface{}) string
+
+func MapUserNames(in []User, f mapf) []string {
+	newArray := []string{}
+
+	for _, v := range in {
+		newArray = append(newArray, f(v))
+	}
+
+	return newArray
+}
+
 type GithubUser struct {
 	ID       int    `json:"id"`
 	UserName string `json:"login"`
@@ -73,7 +85,11 @@ func (c *GithubAuthContext) IsAccessTokenValidAndUserAuthorized(accessToken stri
 		return false
 	}
 
-	userExists := inArray(githubUser.UserName, c.Config.Users)
+	usernames := MapUserNames(c.Config.Users, func(user interface{}) string {
+		return user.(GithubUser).UserName
+	})
+
+	userExists := inArray(githubUser.UserName, usernames)
 
 	if userExists {
 		c.ValidAccessTokens = append(c.ValidAccessTokens, accessToken)

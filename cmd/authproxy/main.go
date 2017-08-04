@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/kensodev/micro-github-auth-proxy"
+	"github.com/kensodev/micro-auth-proxy"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	authproxy.NewHttpListeners(config)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", *listenPort), nil); err != nil {
-		fmt.Errorf("Could not listen on port %s: %s", *listenPort, err.Error())
+		fmt.Fprint("Could not listen on port %s: %s", *listenPort, err.Error())
 		os.Exit(1)
 	}
 }

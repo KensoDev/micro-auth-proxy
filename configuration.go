@@ -7,7 +7,12 @@ import (
 
 type Configuration struct {
 	Upstreams []Upstream `json:"upstreams"`
-	Users     []string   `json:"users"`
+	Users     []User     `json:"users"`
+}
+
+type User struct {
+	Username string `json:"username"`
+	Restrict string `json:"restrict"`
 }
 
 type Upstream struct {

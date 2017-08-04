@@ -1,17 +1,23 @@
 {
   "users": [
-    "KensoDev"
+    {
+      "username": "KensoDev"
+    },
+    {
+      "username": "KensoDev2",
+      "restrict": "GET"
+    }
   ],
   "upstreams": [
     {
       "type": "http",
       "prefix": "/",
-      "location": "https://fe038f2c.ngrok.io"
+      "location": "https://bdf682c0.ngrok.io"
     },
     {
       "type": "http",
       "prefix": "/api/",
-      "location": "https://a778f0e6.ngrok.io"
+      "location": "https://6cc1b022.ngrok.io"
     }
   ]
 }

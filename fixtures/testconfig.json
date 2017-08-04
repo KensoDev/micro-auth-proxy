@@ -1,7 +1,12 @@
 {
   "users": [
-    "xyz",
-    "xyz"
+    {
+      "username": "KensoDev"
+    },
+    {
+      "username": "KensoDev2",
+      "restrict": "GET"
+    }
   ],
   "upstreams": [
     {
