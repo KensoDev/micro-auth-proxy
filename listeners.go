@@ -1,7 +1,6 @@
 package authproxy
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -16,17 +15,20 @@ type Listener struct {
 }
 
 func NewHttpListeners(config *Configuration) {
-	for _, upstream := range config.Upstreams {
+	authContext := NewGithubAuthContext(config)
+	http.Handle("/callback", authContext)
 
+	for _, upstream := range config.Upstreams {
 		uri, _ := url.Parse(upstream.Location)
 
 		proxy := httputil.NewSingleHostReverseProxy(uri)
 
 		listener := &Listener{
-			Prefix:   upstream.Prefix,
-			Location: upstream.Location,
-			Proxy:    proxy,
-			Hostname: uri.Hostname(),
+			AuthContext: authContext,
+			Prefix:      upstream.Prefix,
+			Location:    upstream.Location,
+			Proxy:       proxy,
+			Hostname:    uri.Hostname(),
 		}
 
 		http.Handle(listener.Prefix, listener)
@@ -37,18 +39,16 @@ func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	cookie, err := req.Cookie("github_token")
 
 	if err != nil {
-		bytes, _ := publicAuthHtmlBytes()
-		w.Write(bytes)
-
+		auth, _ := publicAuthHtmlBytes()
+		w.Write(auth)
 		return
 	}
 
 	token := cookie.Value
 
-	if token == "" {
-		bytes, _ := publicAuthHtmlBytes()
-		w.Write(bytes)
-
+	if !l.AuthContext.IsAccessTokenValidAndUserAuthorized(token) {
+		denied, _ := publicDeniedHtmlBytes()
+		w.Write(denied)
 		return
 	}
 
@@ -60,8 +60,6 @@ func (l *Listener) ServeAuthenticatedRequest(w http.ResponseWriter, req *http.Re
 
 	l.Proxy.Director = func(req *http.Request) {
 		director(req)
-		fmt.Println("Hostname")
-		fmt.Println(l.Hostname)
 		req.Host = l.Hostname
 	}
 

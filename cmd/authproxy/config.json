@@ -1,14 +1,17 @@
 {
+  "users": [
+    "KensoDev"
+  ],
   "upstreams": [
     {
-      "type": "server",
+      "type": "http",
       "prefix": "/",
-      "location": "https://fd656e19.ngrok.io"
+      "location": "https://fe038f2c.ngrok.io"
     },
     {
-      "type": "server",
+      "type": "http",
       "prefix": "/api/",
-      "location": "https://80d822c3.ngrok.io"
+      "location": "https://a778f0e6.ngrok.io"
     }
   ]
 }
