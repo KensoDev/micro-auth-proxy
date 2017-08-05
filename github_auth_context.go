@@ -14,7 +14,7 @@ import (
 type GithubAuthContext struct {
 	ClientID          string
 	ClientSecret      string
-	ValidAccessTokens []string
+	ValidAccessTokens map[string]string
 	Config            *Configuration
 }
 
@@ -29,7 +29,7 @@ func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 		ClientID:          os.Getenv("CLIENT_ID"),
 		ClientSecret:      os.Getenv("CLIENT_SECRET"),
 		Config:            config,
-		ValidAccessTokens: []string{},
+		ValidAccessTokens: map[string]string{},
 	}
 }
 
@@ -69,7 +69,9 @@ type GithubAuthResponse struct {
 }
 
 func (c *GithubAuthContext) IsAccessTokenValidAndUserAuthorized(accessToken string) bool {
-	if inArray(accessToken, c.ValidAccessTokens) {
+	_, ok := c.ValidAccessTokens[accessToken]
+
+	if ok {
 		return true
 	}
 
@@ -86,16 +88,21 @@ func (c *GithubAuthContext) IsAccessTokenValidAndUserAuthorized(accessToken stri
 	}
 
 	usernames := MapUserNames(c.Config.Users, func(user interface{}) string {
-		return user.(GithubUser).UserName
+		return user.(User).Username
 	})
 
 	userExists := inArray(githubUser.UserName, usernames)
 
 	if userExists {
-		c.ValidAccessTokens = append(c.ValidAccessTokens, accessToken)
+		c.ValidAccessTokens[accessToken] = githubUser.UserName
 	}
 
 	return userExists
+}
+
+func (c *GithubAuthContext) GetUserName(accessToken string) string {
+	username, _ := c.ValidAccessTokens[accessToken]
+	return username
 }
 
 func (c *GithubAuthContext) ParseUserResponse(response []byte) (*GithubUser, error) {

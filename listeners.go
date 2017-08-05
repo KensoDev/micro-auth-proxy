@@ -12,6 +12,7 @@ type Listener struct {
 	Proxy       *httputil.ReverseProxy
 	Hostname    string
 	AuthContext *GithubAuthContext
+	Config      *Configuration
 }
 
 func NewHttpListeners(config *Configuration) {
@@ -29,6 +30,7 @@ func NewHttpListeners(config *Configuration) {
 			Location:    upstream.Location,
 			Proxy:       proxy,
 			Hostname:    uri.Hostname(),
+			Config:      config,
 		}
 
 		http.Handle(listener.Prefix, listener)
@@ -52,12 +54,19 @@ func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	l.ServeAuthenticatedRequest(w, req)
+	l.ServeAuthenticatedRequest(w, req, token)
 }
 
-func (l *Listener) ServeAuthenticatedRequest(w http.ResponseWriter, req *http.Request) {
-	director := l.Proxy.Director
+func (l *Listener) ServeAuthenticatedRequest(w http.ResponseWriter, req *http.Request, accessToken string) {
+	username := l.AuthContext.GetUserName(accessToken)
+	allowed := l.Config.ShouldRestrictUser(username, req.Method)
 
+	if !allowed {
+		http.Error(w, "Your user is not allowed to perform this action", http.StatusUnauthorized)
+		return
+	}
+
+	director := l.Proxy.Director
 	l.Proxy.Director = func(req *http.Request) {
 		director(req)
 		req.Host = l.Hostname

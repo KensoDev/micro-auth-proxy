@@ -28,7 +28,7 @@ func main() {
 	authproxy.NewHttpListeners(config)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", *listenPort), nil); err != nil {
-		fmt.Fprint("Could not listen on port %s: %s", *listenPort, err.Error())
+		fmt.Errorf("Could not listen on port %s: %s", *listenPort, err.Error())
 		os.Exit(1)
 	}
 }

@@ -36,3 +36,25 @@ func NewConfiguration(data []byte) (*Configuration, error) {
 
 	return config, nil
 }
+
+func (c *Configuration) GetRestrictionsForUsername(username string) string {
+	for _, user := range c.Users {
+		if user.Username == username {
+			return user.Restrict
+			break
+		}
+	}
+
+	return "NotAllowed"
+}
+
+func (c *Configuration) ShouldRestrictUser(username string, method string) bool {
+	allowedMethod := c.GetRestrictionsForUsername(username)
+
+	// Allowed all methods
+	if allowedMethod == "" {
+		return true
+	}
+
+	return allowedMethod == method
+}

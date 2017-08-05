@@ -49,3 +49,39 @@ func (s *ConfigurationSuite) TestUserWithNoRestriction(c *C) {
 	c.Assert(config.Users[0].Restrict, Equals, "")
 	c.Assert(config.Users[1].Restrict, Equals, "GET")
 }
+
+func (s *ConfigurationSuite) GetUserRestrictedMethod(c *C) {
+	configLocation := "fixtures/testconfig.json"
+	reader := NewConfigurationReader(configLocation)
+	data, _ := reader.ReadConfigurationFile()
+
+	config, _ := NewConfiguration(data)
+	method := config.GetRestrictionsForUsername("KensoDev2")
+	c.Assert(method, Equals, "Get")
+
+	method = config.GetRestrictionsForUsername("KensoDev")
+	c.Assert(method, Equals, "")
+}
+
+func (s *ConfigurationSuite) GetUserRestrictedMethodNotAllowed(c *C) {
+	configLocation := "fixtures/testconfig.json"
+	reader := NewConfigurationReader(configLocation)
+	data, _ := reader.ReadConfigurationFile()
+
+	config, _ := NewConfiguration(data)
+	method := config.GetRestrictionsForUsername("KensoDev23234234")
+	c.Assert(method, Equals, "NotAllowed")
+}
+
+func (s *ConfigurationSuite) TestShouldAllowedMethodForUsername(c *C) {
+	configLocation := "fixtures/testconfig.json"
+	reader := NewConfigurationReader(configLocation)
+	data, _ := reader.ReadConfigurationFile()
+
+	config, _ := NewConfiguration(data)
+	should := config.ShouldRestrictUser("KensoDev", "POST")
+	c.Assert(should, Equals, true)
+
+	should = config.ShouldRestrictUser("KensoDev2", "POST")
+	c.Assert(should, Equals, false)
+}
