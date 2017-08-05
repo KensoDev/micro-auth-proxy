@@ -52,6 +52,7 @@ Because request are no longer routed directly from the client to the server, you
 
 ```
 {
+  "authContext": "github",
   "users": [
     {
       "username": "KensoDev"
@@ -79,6 +80,8 @@ Because request are no longer routed directly from the client to the server, you
 
 * `users` - Users that are allowed to access your app.
 * `upstreams` - HTTP supported upstreams that the proxy will call
+* `authContext` - Authentication context you want to use. Currently only
+  supports `github`, see design docs for the interface implemented.
 
 ### Env Vars
 
@@ -119,7 +122,46 @@ Flags:
    Github all over again.
 * From your client side, you can either call the PROXY url as the backend or simply use the prefix `/api` you defined in your configuration.
 
+
 ## Design Decisions and architecture
+
+### The authentication context
+
+The authentication context is the class used in order to check whether a user
+is valid, whether the action they try to do is allowed or not.
+
+The interface supports a token and a username and returns simple objects such
+as strings and booleans.
+
+This was done by design in order to allow you to extend it and add many other
+contexts beyond Github such as Auth0, Google and so on.
+
+
+`IsAccessTokenValidAndUserAuthorized(accessToken string) bool`
+
+This method is used to validate the token and check whether the user is
+authorized. Checking whether they're included in the list of users or not
+
+
+`GetUserName(accessToken sting) string`
+
+Passing in an access token, this should return the username as a string
+
+
+`GetHTTPEndpointPrefix() string`
+
+What endpoint does the external service used to authentication needs exposing.
+
+For example, Github wants you to expose a `/callback` which they send a `code`
+to. You can read more about it [here in the docs.](https://developer.github.com/v3/guides/basics-of-authentication/)
+
+
+`ServeHTTP(w http.ResponseWriter, req *http.Request)`
+
+Your auth context needs to expose an HTTP handler in order to handle the
+callback from the service.
+
+
 
 ### Github Auth Context Token Memoization Process
 

@@ -29,6 +29,15 @@ func (s *ConfigurationSuite) TestJsonReadFileForUsers(c *C) {
 	c.Assert(len(config.Users), Equals, 2)
 }
 
+func (s *ConfigurationSuite) TestAuthenticationContext(c *C) {
+	configLocation := "fixtures/testconfig.json"
+	reader := NewConfigurationReader(configLocation)
+	data, _ := reader.ReadConfigurationFile()
+
+	config, _ := NewConfiguration(data)
+	c.Assert(config.AuthenticationContextName, Equals, "github")
+}
+
 func (s *ConfigurationSuite) TestJsonReadFileForUsersAndValidateError(c *C) {
 	configLocation := "fixtures/testconfigwithnousers.json"
 	reader := NewConfigurationReader(configLocation)

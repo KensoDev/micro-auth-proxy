@@ -6,8 +6,9 @@ import (
 )
 
 type Configuration struct {
-	Upstreams []Upstream `json:"upstreams"`
-	Users     []User     `json:"users"`
+	AuthenticationContextName string     `json:"authContext"`
+	Upstreams                 []Upstream `json:"upstreams"`
+	Users                     []User     `json:"users"`
 }
 
 type User struct {
@@ -19,6 +20,14 @@ type Upstream struct {
 	Prefix   string `json:"prefix"`
 	Location string `json:"location"`
 	Type     string `json:"type"`
+}
+
+func (c *Configuration) GetAuthenticationContext() AuthenticationContext {
+	if c.AuthenticationContextName == "github" {
+		return NewGithubAuthContext(c)
+	}
+
+	return nil
 }
 
 func NewConfiguration(data []byte) (*Configuration, error) {

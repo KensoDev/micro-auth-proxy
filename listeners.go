@@ -11,13 +11,13 @@ type Listener struct {
 	Location    string
 	Proxy       *httputil.ReverseProxy
 	Hostname    string
-	AuthContext *GithubAuthContext
+	AuthContext AuthenticationContext
 	Config      *Configuration
 }
 
 func NewHttpListeners(config *Configuration) {
-	authContext := NewGithubAuthContext(config)
-	http.Handle("/callback", authContext)
+	authContext := config.GetAuthenticationContext()
+	http.Handle(authContext.GetHTTPEndpointPrefix(), authContext)
 
 	for _, upstream := range config.Upstreams {
 		uri, _ := url.Parse(upstream.Location)

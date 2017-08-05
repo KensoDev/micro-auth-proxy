@@ -126,6 +126,10 @@ func (c *GithubAuthContext) GetUserDetailsFromGithub(accessToken string) ([]byte
 	return responseBody, err
 }
 
+func (c *GithubAuthContext) GetHTTPEndpointPrefix() string {
+	return "/callback"
+}
+
 func (c *GithubAuthContext) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	code := req.URL.Query().Get("code")
 	client := &http.Client{}
