@@ -46,7 +46,9 @@ Because request are no longer routed directly from the client to the server, you
 * Save the token in the cookie for the user (See limitations regarding this feature).
 * Docker friendly: Upstreams can be only visible to the main docker container and not accessible to the public. This makes the proxy the only gate to the code and you have to authenticate first.
 
-## Configuration
+## Configuration 
+
+### Config file
 
 ```
 {
@@ -75,9 +77,10 @@ Because request are no longer routed directly from the client to the server, you
 
 ```
 
-
 * `users` - Users that are allowed to access your app.
 * `upstreams` - HTTP supported upstreams that the proxy will call
+
+### Env Vars
 
 You also need a couple of ENV variables
 
@@ -88,6 +91,17 @@ You also need a couple of ENV variables
 
 These are your Github Client ID and Client secret from the Oauth page.
 
+## Usage
+
+```
+usage: authproxy --listen-port=LISTEN-PORT --config-location=CONFIG-LOCATION [<flags>]
+
+Flags:
+  --help                     Show context-sensitive help (also try --help-long and --help-man).
+  --listen-port=LISTEN-PORT  Which port should the proxy listen on
+  --config-location=CONFIG-LOCATION
+                             Proxy Config Location
+```
 
 ## Limitations
 
@@ -103,18 +117,13 @@ These are your Github Client ID and Client secret from the Oauth page.
    This will make sure that the github token will get passed through to the
    proxy and it will direct the request to the server and not redirect to
    Github all over again.
+* From your client side, you can either call the PROXY url as the backend or simply use the prefix `/api` you defined in your configuration.
 
 ## Design Decisions and architecture
 
 ### Github Auth Context Token Memoization Process
 
 Once you have a Github Token in the http cookie, the proxy will validate that
-token against Github every 2 minutes (counted when the process is running).
+token against Github. Make sure the user is authorized (from the user list) and will not validate again.
 
-For example:
-
-You went to github, authenticated and you got the token `ABC` back. The proxy
-verify that this token belongs to a user that the proxy allows through.
-
-Once that token is verified, it is stored in memory for 2 minutes to avoid
-re-validating against the Github API.
+The cookie expiration is set for 24 hours, when you authenticate again, you will get revalidated.
