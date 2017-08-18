@@ -70,7 +70,7 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
 
-var _publicAuth0HtmlTpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x8f\xdd\x0a\xc2\x30\x0c\x85\xef\x7d\x8a\xb8\x07\x58\xbc\x96\x6c\x22\xee\x46\xf0\x25\xba\xad\xae\x85\xae\x29\x33\x03\x47\xe9\xbb\x4b\x57\x10\xf1\x2a\x5f\xc8\xcf\x39\x87\x8c\xcc\xae\x3d\x00\x90\xd1\x6a\xdc\x01\xbf\xd4\xf3\xb8\x65\x00\xa0\x50\x2a\xc0\x75\x15\x73\x02\xb5\x8a\xd1\x5e\xec\xa0\xc4\xb2\x87\xb0\xf0\x7b\x2b\x8b\x18\xfe\x2f\x48\x81\x59\xf4\xb3\xa9\x8c\x48\x78\x9d\x11\x63\xac\xf3\x97\x8e\x67\x65\x7d\x4a\xe8\x78\xb2\xfe\x32\x38\xab\xbd\x34\x31\xd6\xb7\x9d\xee\x5d\x4a\x55\xfb\xc8\x33\x42\xd5\x82\x30\xf4\x7a\xb2\xfe\x98\xbb\x5f\x2d\xc2\xe2\x93\xb0\x64\xf9\x04\x00\x00\xff\xff\x0f\x4b\x4a\xfe\xd3\x00\x00\x00")
+var _publicAuth0HtmlTpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x8f\x41\x6b\xc3\x30\x0c\x85\xef\xfb\x15\x5a\x0e\x3b\x46\x3b\x0f\x27\x63\x2c\x97\x42\x4e\x85\xfe\x00\xc5\x71\x63\x53\xc7\x36\xa9\x02\x0d\xc6\xff\xbd\x38\x86\xb6\xf4\xa4\xef\x21\x3d\xf1\x9e\xd0\x3c\xdb\xf6\x03\x40\x68\x45\xe3\x0e\xf8\xa0\xc1\x8f\x5b\x06\x00\x11\xca\x04\xf8\x5b\x59\x7f\x03\xad\xac\x95\x63\x23\x89\x8d\x77\x10\x16\x7f\xdb\xca\x21\x86\x77\x87\x20\xd0\x8b\x3a\x37\x95\x66\x0e\xd7\x1f\xc4\x18\xeb\xfc\xa5\xf3\x33\x19\x97\x12\x5a\x3f\x19\xf7\x2b\xad\x51\x8e\x9b\x18\xeb\xff\x9d\x0e\x5d\x4a\x5f\x92\xac\x1d\x48\x5e\x4e\xc7\x7e\xdf\x3c\x65\x4a\x55\xdb\x67\xa3\x40\x6a\x81\x3d\x0c\x6a\x32\xee\x33\xab\xd7\x20\x02\x4b\x09\x81\xa5\xe8\x3d\x00\x00\xff\xff\x8d\xc1\xc2\xee\xf0\x00\x00\x00")
 
 func publicAuth0HtmlTplBytes() ([]byte, error) {
 	return bindataRead(
@@ -85,7 +85,7 @@ func publicAuth0HtmlTpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/auth0.html.tpl", size: 211, mode: os.FileMode(420), modTime: time.Unix(1503034838, 0)}
+	info := bindataFileInfo{name: "public/auth0.html.tpl", size: 240, mode: os.FileMode(420), modTime: time.Unix(1503085967, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -105,7 +105,7 @@ func publicDeniedHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/denied.html", size: 151, mode: os.FileMode(420), modTime: time.Unix(1503027229, 0)}
+	info := bindataFileInfo{name: "public/denied.html", size: 151, mode: os.FileMode(420), modTime: time.Unix(1501818654, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -125,7 +125,7 @@ func publicGithubHtmlTpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/github.html.tpl", size: 243, mode: os.FileMode(420), modTime: time.Unix(1503036935, 0)}
+	info := bindataFileInfo{name: "public/github.html.tpl", size: 243, mode: os.FileMode(420), modTime: time.Unix(1503085899, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -182,8 +182,8 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"public/auth0.html.tpl": publicAuth0HtmlTpl,
-	"public/denied.html": publicDeniedHtml,
+	"public/auth0.html.tpl":  publicAuth0HtmlTpl,
+	"public/denied.html":     publicDeniedHtml,
 	"public/github.html.tpl": publicGithubHtmlTpl,
 }
 
@@ -226,10 +226,11 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"public": &bintree{nil, map[string]*bintree{
-		"auth0.html.tpl": &bintree{publicAuth0HtmlTpl, map[string]*bintree{}},
-		"denied.html": &bintree{publicDeniedHtml, map[string]*bintree{}},
+		"auth0.html.tpl":  &bintree{publicAuth0HtmlTpl, map[string]*bintree{}},
+		"denied.html":     &bintree{publicDeniedHtml, map[string]*bintree{}},
 		"github.html.tpl": &bintree{publicGithubHtmlTpl, map[string]*bintree{}},
 	}},
 }}
@@ -280,4 +281,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

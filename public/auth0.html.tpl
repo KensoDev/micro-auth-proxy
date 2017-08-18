@@ -6,7 +6,7 @@
       Auth0 authentication proxy
     </p>
     <p>
-      <a href="https://{{.AuthDomain}}/login?client={{.ClientID}}">Login</a> to begin!</a>
+      <a href="https://{{.AuthDomain}}/login?client={{.ClientID}}&callbackURL={{.CallbackURL}}">Login</a> to begin!</a>
     </p>
   </body>
 </html>
