@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -27,8 +26,8 @@ type GithubAuthRequest struct {
 
 func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 	return &GithubAuthContext{
-		ClientID:          os.Getenv("CLIENT_ID"),
-		ClientSecret:      os.Getenv("CLIENT_SECRET"),
+		ClientID:          GetenvOrDie("CLIENT_ID"),
+		ClientSecret:      GetenvOrDie("CLIENT_SECRET"),
 		Config:            config,
 		ValidAccessTokens: map[string]string{},
 	}
