@@ -14,8 +14,9 @@ import (
 type GithubAuthContext struct {
 	ClientID          string
 	ClientSecret      string
-	ValidAccessTokens map[string]string
 	Config            *Configuration
+	CookirName        string
+	ValidAccessTokens map[string]string
 }
 
 type GithubAuthRequest struct {
@@ -33,17 +34,12 @@ func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 	}
 }
 
-func inArray(val string, array []string) (exists bool) {
-	exists = false
+func (c *GithubAuthContext) GetLoginPage() ([]byte, error) {
+	return publicAuthHtmlBytes()
+}
 
-	for _, v := range array {
-		if val == v {
-			exists = true
-			return
-		}
-	}
-
-	return
+func (c *GithubAuthContext) GetCookieName() string {
+	return "github_token"
 }
 
 type mapf func(interface{}) string
@@ -165,7 +161,7 @@ func (c *GithubAuthContext) ServeHTTP(w http.ResponseWriter, req *http.Request) 
 
 	expiration := time.Now().Add(24 * time.Hour)
 	cookie := http.Cookie{
-		Name:    "github_token",
+		Name:    c.GetCookieName(),
 		Value:   githubResponse.AccessToken,
 		Expires: expiration,
 	}

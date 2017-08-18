@@ -1,8 +1,8 @@
 {
-  "authContext": "github",
+  "authContext": "auth0",
   "users": [
     {
-      "username": "KensoDev"
+      "username": "avi@kensodev.com"
     },
     {
       "username": "KensoDev2",

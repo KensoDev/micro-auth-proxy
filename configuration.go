@@ -27,6 +27,10 @@ func (c *Configuration) GetAuthenticationContext() AuthenticationContext {
 		return NewGithubAuthContext(c)
 	}
 
+	if c.AuthenticationContextName == "auth0" {
+		return NewAuth0AuthContext(c)
+	}
+
 	return nil
 }
 

@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	listenPort     = kingpin.Flag("listen-port", "Which port should the proxy listen on").Required().Int()
-	configLocation = kingpin.Flag("config-location", "Proxy Config Location").Required().String()
+	listenPort     = kingpin.Flag("listen", "Which port should the proxy listen on").Required().Int()
+	configLocation = kingpin.Flag("config", "Proxy Config Location").Required().String()
 )
 
 func main() {

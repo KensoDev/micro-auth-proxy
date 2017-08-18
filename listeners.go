@@ -38,10 +38,10 @@ func NewHttpListeners(config *Configuration) {
 }
 
 func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	cookie, err := req.Cookie("github_token")
+	cookie, err := req.Cookie(l.AuthContext.GetCookieName())
 
 	if err != nil {
-		auth, _ := publicAuthHtmlBytes()
+		auth, _ := l.AuthContext.GetLoginPage()
 		w.Write(auth)
 		return
 	}

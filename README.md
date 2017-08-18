@@ -85,12 +85,18 @@ Because request are no longer routed directly from the client to the server, you
 
 ### Env Vars
 
-You also need a couple of ENV variables
+### For Github
+
+ENV vars you'll need to config in order for the proxy to work
 
 ```
   CLIENT_ID
   CLIENT_SECRET
 ```
+
+### For Auth0
+
+// TODO
 
 These are your Github Client ID and Client secret from the Oauth page.
 
@@ -101,8 +107,8 @@ usage: authproxy --listen-port=LISTEN-PORT --config-location=CONFIG-LOCATION [<f
 
 Flags:
   --help                     Show context-sensitive help (also try --help-long and --help-man).
-  --listen-port=LISTEN-PORT  Which port should the proxy listen on
-  --config-location=CONFIG-LOCATION
+  --listen=LISTEN-PORT  Which port should the proxy listen on
+  --config=CONFIG-LOCATION
                              Proxy Config Location
 ```
 
