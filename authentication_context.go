@@ -1,6 +1,10 @@
 package authproxy
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+	"os"
+)
 
 type AuthenticationContext interface {
 	IsAccessTokenValidAndUserAuthorized(accessToken string) bool
@@ -10,4 +14,16 @@ type AuthenticationContext interface {
 	GetLoginPage() ([]byte, error)
 	ServeHTTP(w http.ResponseWriter, req *http.Request)
 	RenderHTMLFile() error
+}
+
+// GetenvOrDie is a safety wrapper around os.Getenv.
+// This fatals if the key is unset or empty.
+func GetenvOrDie(k string) string {
+	o := os.Getenv(k)
+
+	if o == "" {
+		log.Fatalf("%s environment variable missing and is required.", k)
+	}
+
+	return o
 }

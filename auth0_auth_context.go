@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -24,10 +23,10 @@ type Auth0AuthContext struct {
 func NewAuth0AuthContext(config *Configuration) *Auth0AuthContext {
 	return &Auth0AuthContext{
 		Config:            config,
-		ClientID:          os.Getenv("AUTH0_CLIENT_ID"),
-		ClientSecret:      os.Getenv("AUTH0_CLIENT_SECRET"),
-		AuthDomain:        os.Getenv("AUTH0_DOMAIN"),
-		CallbackURL:       os.Getenv("AUTH0_CALLBACK_URL"),
+		ClientID:          GetenvOrDie("AUTH0_CLIENT_ID"),
+		ClientSecret:      GetenvOrDie("AUTH0_CLIENT_SECRET"),
+		AuthDomain:        GetenvOrDie("AUTH0_DOMAIN"),
+		CallbackURL:       GetenvOrDie("AUTH0_CALLBACK_URL"),
 		ValidAccessTokens: map[string]string{},
 	}
 }
