@@ -18,6 +18,7 @@ type Auth0AuthContext struct {
 	ClientSecret      string
 	CallbackURL       string
 	ValidAccessTokens map[string]string
+	HTMLFile          []byte
 }
 
 func NewAuth0AuthContext(config *Configuration) *Auth0AuthContext {
@@ -124,5 +125,22 @@ func (c *Auth0AuthContext) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func (c *Auth0AuthContext) GetLoginPage() ([]byte, error) {
-	return publicAuth0HtmlBytes()
+	return c.HTMLFile, nil
+}
+
+func (c *Auth0AuthContext) RenderHTMLFile() error {
+	tplBytes, err := publicAuth0HtmlTplBytes()
+	if err != nil {
+		return err
+	}
+
+	tpl := string(tplBytes)
+
+	f, err := RenderTemplate(tpl, c)
+	if err != nil {
+		return err
+	}
+
+	c.HTMLFile = f
+	return nil
 }

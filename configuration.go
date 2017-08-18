@@ -22,16 +22,17 @@ type Upstream struct {
 	Type     string `json:"type"`
 }
 
-func (c *Configuration) GetAuthenticationContext() AuthenticationContext {
+func (c *Configuration) GetAuthenticationContext() (cx AuthenticationContext, err error) {
 	if c.AuthenticationContextName == "github" {
-		return NewGithubAuthContext(c)
+		cx = NewGithubAuthContext(c)
 	}
 
 	if c.AuthenticationContextName == "auth0" {
-		return NewAuth0AuthContext(c)
+		cx = NewAuth0AuthContext(c)
 	}
 
-	return nil
+	err = cx.RenderHTMLFile()
+	return cx, err
 }
 
 func NewConfiguration(data []byte) (*Configuration, error) {
