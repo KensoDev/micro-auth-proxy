@@ -9,4 +9,5 @@ type AuthenticationContext interface {
 	GetCookieName() string
 	GetLoginPage() ([]byte, error)
 	ServeHTTP(w http.ResponseWriter, req *http.Request)
+	RenderHTMLFile() error
 }

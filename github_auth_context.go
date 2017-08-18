@@ -17,6 +17,7 @@ type GithubAuthContext struct {
 	Config            *Configuration
 	CookirName        string
 	ValidAccessTokens map[string]string
+	HTMLFile          []byte
 }
 
 type GithubAuthRequest struct {
@@ -35,7 +36,7 @@ func NewGithubAuthContext(config *Configuration) *GithubAuthContext {
 }
 
 func (c *GithubAuthContext) GetLoginPage() ([]byte, error) {
-	return publicAuthHtmlBytes()
+	return c.HTMLFile, nil
 }
 
 func (c *GithubAuthContext) GetCookieName() string {
@@ -169,4 +170,21 @@ func (c *GithubAuthContext) ServeHTTP(w http.ResponseWriter, req *http.Request) 
 	http.SetCookie(w, &cookie)
 
 	http.Redirect(w, req, "/", 302)
+}
+
+func (c *GithubAuthContext) RenderHTMLFile() error {
+	tplBytes, err := publicGithubHtmlTplBytes()
+	if err != nil {
+		return err
+	}
+
+	tpl := string(tplBytes)
+
+	f, err := RenderTemplate(tpl, c)
+	if err != nil {
+		return err
+	}
+
+	c.HTMLFile = f
+	return nil
 }

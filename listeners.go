@@ -1,6 +1,7 @@
 package authproxy
 
 import (
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -16,7 +17,11 @@ type Listener struct {
 }
 
 func NewHttpListeners(config *Configuration) {
-	authContext := config.GetAuthenticationContext()
+	authContext, err := config.GetAuthenticationContext()
+	if err != nil {
+		log.Fatalln("auth context creation failed:", err)
+	}
+
 	http.Handle(authContext.GetHTTPEndpointPrefix(), authContext)
 
 	for _, upstream := range config.Upstreams {

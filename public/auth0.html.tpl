@@ -6,7 +6,7 @@
       Auth0 authentication proxy
     </p>
     <p>
-      <a href="https://kensodev.auth0.com/login?client=keAk3HU36XxZe8kontoQO-VwARf2g2yH">Login</a> to begin!</a>
+      <a href="https://{{.AuthDomain}}/login?client={{.ClientID}}">Login</a> to begin!</a>
     </p>
   </body>
 </html>
