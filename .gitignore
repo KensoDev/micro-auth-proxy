@@ -14,3 +14,5 @@
 .glide/
 
 cmd/authproxy/authproxy
+cmd/authproxy/.auth0
+cmd/authproxy/.github
